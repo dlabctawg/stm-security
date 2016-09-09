@@ -17,3 +17,4 @@ if(identical(names(bow2stm$documents),meta$speechID)) {
 }
 t1<-proc.time()
 cat('STM model fit in',round((t1-t0)/60,2)[3],'minutes.')
+save(mod,file='stm-model.RData')
