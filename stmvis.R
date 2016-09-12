@@ -25,4 +25,4 @@ load('stm-model.RData')
 
 
 # visualize
-stmBrowser(mod=mod,data=meta,covariates=c('sep11','years','days','party','chamber'),text='name',id='speechID',n=1000)
+stmBrowser(mod=mod,data=meta,covariates=c('word.count','sep11','years','days','party','chamber'),text='name',id='speechID',n=1000)
