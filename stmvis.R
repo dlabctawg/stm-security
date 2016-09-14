@@ -35,7 +35,7 @@ stmBrowser(mod=mod,data=meta,covariates=c('word.count','sep11','years','days','p
 
 load('stm-model-cont-party.RData')
 for(i in 1:10) {
-	png(paste('images/content/party/topic',i,'.png',sep=''),width = 480,height = 300)
+	png(paste('images/content/party/topic',i,'.png',sep=''),width = 900,height = 600)
 	plot.STM(mod,type='perspectives',topics=i,covarlevels=c('Democratic','Republican'),main = paste('Topic',i),xlim=c(-1.5,1.5))
 	dev.off()
 	}
@@ -43,7 +43,7 @@ for(i in 1:10) {
 load('stm-model-cont-911.RData')
 mod$settings$covariates$yvarlevels<-c('before','after')
 for(i in 1:10) {
-	png(paste('images/content/after911/topic',i,'.png',sep=''),width = 480,height = 300)
+	png(paste('images/content/after911/topic',i,'.png',sep=''),width = 900,height = 600)
 	plot.STM(mod,type='perspectives',topics=i,covarlevels=c('before','after'),main = paste('Topic',i,'change after September 11, 2001'))
 	dev.off()
 }
