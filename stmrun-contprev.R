@@ -3,8 +3,6 @@ cat('\014')
 library(stm)
 require(data.table)
 
-# Load stm-formatted bag of words
-load('bow2stm-security.RData')
 
 # Load metadata
 load('meta-security-time.RData')
@@ -26,9 +24,12 @@ setkey(meta,party)
 meta['N/A',party:='Other']
 setkey(meta,party)
 meta[,party:=droplevels(party)]
+levels(meta$party)<-c("Other","Democratic","Republican" )
 meta[,.N,by=party]
 ## period
-meta[,after911:=sep11>=0]
+meta[,after911:=factor(sep11>=0,labels=c('before','after'))]
+meta[,partyXafter911:=interaction(party,after911,drop=T)]
+save(meta,file='meta-security-fit.RData')
 
 
 summary(meta)
