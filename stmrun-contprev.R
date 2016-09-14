@@ -37,6 +37,7 @@ setkey(meta,speechID)
 # run provisional topic model testing that documents and metadata are properly sorted
 ## note that no covariates are used but content and prevalance terms could be easily added
 t0<-proc.time()
+cat(c(rep('#',10),' Fitting content = ~after911 ',rep('#',10)),sep='')
 if(identical(names(bow2stm$documents),meta$speechID)) {
 	mod<-stm(bow2stm$documents,bow2stm$vocab,K=10,data=meta,content = ~after911)
 }
@@ -47,6 +48,7 @@ save(mod,file='stm-model-cont-911.RData')
 # run provisional topic model testing that documents and metadata are properly sorted
 ## note that no covariates are used but content and prevalance terms could be easily added
 t0<-proc.time()
+cat(c(rep('#',10),' Fitting content = ~party ',rep('#',10)),sep='')
 if(identical(names(bow2stm$documents),meta$speechID)) {
 	mod<-stm(bow2stm$documents,bow2stm$vocab,K=10,data=meta,content = ~party)
 }
@@ -55,6 +57,7 @@ cat('STM model fit in',round((t1-t0)/60,2)[3],'minutes.')
 save(mod,file='stm-model-cont-party.RData')
 
 t0<-proc.time()
+cat(c(rep('#',10),' Fitting prevalence = ~after911*party ',rep('#',10)),sep='')
 if(identical(names(bow2stm$documents),meta$speechID)) {
 	mod<-stm(bow2stm$documents,bow2stm$vocab,K=10,data=meta,prevalence = ~after911*party)
 }
