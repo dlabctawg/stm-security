@@ -1,0 +1,63 @@
+rm(list=ls())
+cat('\014')
+library(stm)
+require(data.table)
+
+# Load stm-formatted bag of words
+load('bow2stm-security.RData')
+
+# Load metadata
+load('meta-security-time.RData')
+
+# recode
+## party
+summary(meta)
+setkey(meta,party)
+meta['R',party:='Republican']
+setkey(meta,party)
+meta['D',party:='Democratic']
+setkey(meta,party)
+meta['I',party:='Other']
+setkey(meta,party)
+meta['Independent',party:='Other']
+setkey(meta,party)
+meta['L',party:='Other']
+setkey(meta,party)
+meta['N/A',party:='Other']
+setkey(meta,party)
+meta[,party:=droplevels(party)]
+meta[,.N,by=party]
+## period
+meta[,after911:=sep11>=0]
+
+
+summary(meta)
+setkey(meta,speechID)
+
+# run provisional topic model testing that documents and metadata are properly sorted
+## note that no covariates are used but content and prevalance terms could be easily added
+t0<-proc.time()
+if(identical(names(bow2stm$documents),meta$speechID)) {
+	mod<-stm(bow2stm$documents,bow2stm$vocab,K=10,data=meta,content = ~after911)
+}
+t1<-proc.time()
+cat('STM model fit in',round((t1-t0)/60,2)[3],'minutes.')
+save(mod,file='stm-model-cont-911.RData')
+
+# run provisional topic model testing that documents and metadata are properly sorted
+## note that no covariates are used but content and prevalance terms could be easily added
+t0<-proc.time()
+if(identical(names(bow2stm$documents),meta$speechID)) {
+	mod<-stm(bow2stm$documents,bow2stm$vocab,K=10,data=meta,content = ~party)
+}
+t1<-proc.time()
+cat('STM model fit in',round((t1-t0)/60,2)[3],'minutes.')
+save(mod,file='stm-model-cont-party.RData')
+
+t0<-proc.time()
+if(identical(names(bow2stm$documents),meta$speechID)) {
+	mod<-stm(bow2stm$documents,bow2stm$vocab,K=10,data=meta,prevalence = ~after911*party)
+}
+t1<-proc.time()
+cat('STM model fit in',round((t1-t0)/60,2)[3],'minutes.')
+save(mod,file='stm-model-prev.RData')
